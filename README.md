@@ -22,3 +22,5 @@ General folder structure:
  After data cleaning, a random forrest classifier was used to determine the most important features responsible for a win of the fighter in question (in this case it will be referred to as the red fighter)
  Determining factors were further analyzed to assign a quantitative value to the favoured fighter.
  The outcome is described in further detail in the file UFCDataAnalysisReport.pdf inside of the reports folder.
+
+Thanks to Adrian Spataru and Bohdan Andrusyak from MLGraz for the data science course and the inspiration for this project.

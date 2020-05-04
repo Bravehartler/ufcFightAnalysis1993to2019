@@ -96,7 +96,7 @@ for head in headers:
 
 punched = df_RB.copy()
 punched.opp_strikes = (punched.opp_strikes/100).astype(int)
-punched = df_RB.groupby(["opp_strikes"]).wins.sum().sort_index().reset_index()
+punched = punched.groupby(["opp_strikes"]).wins.sum().sort_index().reset_index()
 
 fig = px.bar(punched, x="opp_strikes", y="wins",
     orientation="v", barmode="group",  template="plotly_white",

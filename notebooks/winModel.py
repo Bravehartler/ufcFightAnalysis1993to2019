@@ -17,6 +17,7 @@ import plotly.express as px
 
 import pickle
 
+folder = "resources/modelOutcome/"
 #load the previous generated cleanMLRDy File and the comparissons
 df = pd.read_pickle("./data/clean/cleanMLRdy.pkl")
 # make a set for blue wins
@@ -48,7 +49,7 @@ for key in report.index:
         #take the model closest do the mean
         checkval = np.abs(np.mean(rfc_scores[key])-rfc_scores[key])
         idx = np.where(np.min(checkval)==checkval)[0][0]
-        rfc=model[idx]
+        rfc=model[idx] #=> chosen model but we will use every fitted model to analyze the features
         break
 
 
@@ -75,10 +76,12 @@ for nr in range(1,len(imp_R)):
 #rfpimp.plot_importances(importance_R)
 
 #save the stuff
-with open('models/rfcForRedWins.pkl', 'wb') as handle:
-    pickle.dump(rfc_R, handle, protocol=pickle.HIGHEST_PROTOCOL)
-report_R.to_pickle("resources/rfcReportRedWins.pkl")
-importance_R.to_pickle("resources/featuresRedWins.pkl")
+for nr in range(0,len(models)):
+    model = models[nr]
+    with open(folder + 'rfcForRedWins_'+str(nr)+'.pkl', 'wb') as handle:
+        pickle.dump(model, handle, protocol=pickle.HIGHEST_PROTOCOL)
+report_R.to_pickle(folder + "rfcReportRedWins.pkl")
+importance_R.to_pickle(folder + "featuresRedWins.pkl")
 
 #and now do the same thing if blue wins (sanity check)
 y = B_Winner_Blue
@@ -114,10 +117,10 @@ importance_B = rfpimp.importances(rfc, X_test, y_test)
 
 
 #save the stuff
-with open('models/rfcForBlueWins.pkl', 'wb') as handle:
+with open(folder + 'rfcForBlueWins.pkl', 'wb') as handle:
     pickle.dump(rfc_B, handle, protocol=pickle.HIGHEST_PROTOCOL)
-report_B.to_pickle("resources/rfcReportBlueWins.pkl")
-importance_B.to_pickle("resources/featuresBlueWins.pkl")
+report_B.to_pickle(folder + "rfcReportBlueWins.pkl")
+importance_B.to_pickle(folder + "featuresBlueWins.pkl")
 
 #report_B has very low recall and f1 ==> not enough data to make a model the other way round and make comparisson
 #according to imprtance R: most significant feature is the age of each combatant followed by landed significant strikes

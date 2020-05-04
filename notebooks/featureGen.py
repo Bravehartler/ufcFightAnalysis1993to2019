@@ -33,7 +33,7 @@ df_ufc = pd.read_csv("./data/raw/raw_total_fight_data.csv",delimiter=";")
 #Description: " Raw fight data scraped from ufcstats events page. This contains scraped information of every fight of every event in the ufc."
 
 # %%
-# Since you should never trust data that you did not manipulate yourself (except maybe colleagues because you know their adresses :) ), we start out with the df_ufc in order to check what the author did to his data sets ==> First question: How did he received his dataframe features?
+# Since you should never trust data that you did not manipulate yourself (except maybe colleagues because you know their adresses :) ), we start out with the df_ufc in order to check what the author did to his data sets ==> First question: How did he received his dataframe features? (So yeah basically I start with raw_fighter_details.csv and raw_total_fight_data and check if i end up at data.csv) EDIT: in hindsight, this took me a whole day :P BUT AT LEAST IT WORKS!!!!!!!!!! ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^
 # Focus on df_ufc and let's start out with data cleaning and processing (also compare it with partprufc and preprufc):
 
 #first check headers:

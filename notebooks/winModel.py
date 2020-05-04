@@ -42,20 +42,36 @@ rfc_scores = cross_validate(rfc, X, y.values.ravel(), cv=9, scoring=('accuracy',
 model = rfc_scores['estimator']
 
 #make a report on accuracy, precision, recall and f1
-report = pd.DataFrame(index=list(rfc_scores.keys())[3:], columns=['Random Forest avg', 'Random Forest std'])
+report = pd.DataFrame(index=list(rfc_scores.keys())[3:], columns=['Random Forest avg', 'Random Forest std', 'Chosen model params'])
 for key in report.index:
-    report.loc[key] = [np.mean(rfc_scores[key]), np.std(rfc_scores[key])]
     if(key=="test_recall"):
         #take the model closest do the mean
         checkval = np.abs(np.mean(rfc_scores[key])-rfc_scores[key])
-        rfc=model[np.where(np.min(checkval)==checkval)[0][0]]
+        idx = np.where(np.min(checkval)==checkval)[0][0]
+        rfc=model[idx]
+        break
+
+
+for key in report.index:
+    report.loc[key] = [np.mean(rfc_scores[key]), np.std(rfc_scores[key]), rfc_scores[key][idx]]
+
 report *= 100
 report_R = report.astype(float).round(1)
 rfc_R = rfc
 
 
 #check importance of different features
-importance_R = rfpimp.importances(rfc, X_test, y_test)
+models = rfc_scores['estimator']
+imp_R = []
+for model in models:
+    imp_R.append(rfpimp.importances(model, X_test, y_test)[0:3]) # ==> check many features of the tested models
+
+importance_R = imp_R[0]
+
+for nr in range(1,len(imp_R)):
+    importance_R = pd.concat([importance_R,imp_R[nr]],axis=0) 
+
+
 #rfpimp.plot_importances(importance_R)
 
 #save the stuff
@@ -76,12 +92,18 @@ model = rfc_scores['estimator']
 
 #make a report on accuracy, precision, recall and f1
 report = pd.DataFrame(index=list(rfc_scores.keys())[3:], columns=['Random Forest avg', 'Random Forest std'])
+report = pd.DataFrame(index=list(rfc_scores.keys())[3:], columns=['Random Forest avg', 'Random Forest std', 'Chosen model params'])
 for key in report.index:
-    report.loc[key] = [np.mean(rfc_scores[key]), np.std(rfc_scores[key])]
     if(key=="test_recall"):
         #take the model closest do the mean
         checkval = np.abs(np.mean(rfc_scores[key])-rfc_scores[key])
-        rfc=model[np.where(np.min(checkval)==checkval)[0][0]]
+        idx = np.where(np.min(checkval)==checkval)[0][0]
+        rfc=model[idx]
+        break
+
+for key in report.index:
+    report.loc[key] = [np.mean(rfc_scores[key]), np.std(rfc_scores[key]), rfc_scores[key][idx]]
+
 report *= 100
 report_B = report.astype(float).round(1)
 rfc_B = rfc
